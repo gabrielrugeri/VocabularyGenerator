@@ -14,6 +14,7 @@ def create_tables():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             word TEXT NOT NULL UNIQUE,
             sentence TEXT,
+            translation TEXT,
             language TEXT DEFAULT 'english',
             level TEXT DEFAULT 'beginner'
         )
@@ -22,15 +23,15 @@ def create_tables():
     conn.commit()
     conn.close()
 
-def add_word(word, sentence, language="english", level="beginner"):
+def add_word(word, sentence, translation, language="english", level="beginner"):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     try:
         cursor.execute("""
-            INSERT INTO vocabulary (word, sentence, language, level)
-            VALUES (?, ?, ?, ?)
-        """, (word, sentence, language, level))
+            INSERT INTO vocabulary (word, sentence, translation, language, level)
+            VALUES (?, ?, ?, ?, ?)
+        """, (word, sentence, translation, language, level))
         conn.commit()
     except sqlite3.IntegrityError:
         print(f"'{word}' already exists in database.")
