@@ -16,4 +16,3 @@ if st.button("Generate sentence"):
 
 # Placeholder for history
 st.subheader("Your sentence history (coming soon...)")
-ß

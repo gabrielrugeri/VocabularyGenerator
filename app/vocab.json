@@ -1,0 +1,21 @@
+{
+  "language": "english",
+  "level": "beginner",
+  "words": [
+    {
+      "word": "cat",
+      "sentence": "The cat is sleeping on the couch.",
+      "translation": "O gato está dormindo no sofá."
+    },
+    {
+      "word": "house",
+      "sentence": "I live in a big house.",
+      "translation": "Eu moro em uma casa grande."
+    },
+    {
+      "word": "apple",
+      "sentence": "She ate a red apple after lunch.",
+      "translation": "Ela comeu uma maçã vermelha depois do almoço."
+    }
+  ]
+}
