@@ -5,12 +5,7 @@ REM Caminho relativo da pasta atual
 cd /d %~dp0
 
 REM Empacotar com PyInstaller
-pyinstaller --onefile ^
-  --name "Gerador de Vocabulario" ^
-  --add-data "data;vocabulary_tool/data" ^
-  --add-data ".env;." ^
-  --hidden-import "streamlit" ^
-  app.py
+pyinstaller gerador_vocabulario.spec --collect-all streamlit
 
-echo === Empacotamento concluído! Executável gerado em /dist ===
+echo === Empacotamento concluido! Executavel gerado em /dist ===
 pause
