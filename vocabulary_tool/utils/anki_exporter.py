@@ -8,6 +8,7 @@ Requisitos:
 
 import json
 import urllib.request
+import backend.database as db
 from typing import Dict, List, Optional
 
 # Starndard CSS for Anki cards
@@ -59,23 +60,23 @@ class AnkiExporter:
         except Exception as e:
             return f"❌ Erro inesperado: {str(e)}"
 
-    def create_tts_model(self, model_name: str = "TTS_English") -> Dict:
+    def create_tts_model(
+        self,
+        model_name: str = "TTS_Multilingual",
+        fields: list[str] = ["Front", "Back", "TTS_Text", "TTS_Lang"]
+    ) -> str:
         """
-        Cria um modelo de cartão com suporte a TTS em inglês
+        Cria um modelo de cartão com suporte a TTS dinâmico
         
         Args:
-            model_name: Nome do modelo a ser criado
-            
-        Returns:
-            Resposta do AnkiConnect
+            model_name: Nome do modelo
+            fields: Campos personalizados (deve incluir TTS_Text e TTS_Lang)
         """
-        fields = ["Front", "Back", "TTS_English"]
         template = {
             "Name": "Card 1",
-            "Front": "{{Front}}<br>{{tts en_US voices=AwesomeTTS:TTS_English}}",
+            "Front": "{{Front}}<br>{{tts {{TTS_Lang}} voices=AwesomeTTS:TTS_Text}}",
             "Back": "{{FrontSide}}<hr id=answer>{{Back}}"
         }
-        
         return self._request(
             "createModel",
             {
@@ -86,29 +87,23 @@ class AnkiExporter:
             }
         )
 
-    def add_tts_card(
+    def add_card(
         self,
         deck_name: str,
         front: str,
         back: str,
-        tts_text: str,
-        model_name: str = "TTS_English",
+        tts_lang: str,
+        model_name: str = "TTS_Multilingual",
         tags: Optional[List[str]] = None
-    ) -> Dict:
+    ) -> str:
         """
-        Adiciona um cartão com suporte a TTS em inglês
+        Adiciona um cartão com TTS no idioma especificado
         
         Args:
-            deck_name: Nome do deck de destino
-            front: Texto da frente do cartão
-            back: Texto do verso do cartão
-            tts_text: Texto a ser convertido em TTS (inglês)
-            model_name: Nome do modelo a ser usado
-            tags: Lista de tags para o cartão
-            
-        Returns:
-            Resposta do AnkiConnect
+            tts_lang: Código de idioma (ex: 'en_US', 'pt_BR', 'es_ES')
+            outros parâmetros conforme anterior
         """
+        
         return self._request(
             "addNote",
             {
@@ -118,9 +113,9 @@ class AnkiExporter:
                     "fields": {
                         "Front": front,
                         "Back": back,
-                        "TTS_English": tts_text
+                        "TTS_Text": front,
+                        "TTS_Lang": tts_lang
                     },
-                    "options": {"allowDuplicate": False},
                     "tags": tags or []
                 }
             }
@@ -140,7 +135,7 @@ if __name__ == "__main__":
     exporter.ensure_model_exists()
     
     # 2. Adicionar um cartão de exemplo
-    result = exporter.add_tts_card(
+    result = exporter.add_card(
         deck_name="English::Vocabulary",
         front="What is the English word for 'maçã'?",
         back="apple",
