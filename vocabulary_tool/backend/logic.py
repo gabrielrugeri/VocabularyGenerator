@@ -9,7 +9,7 @@ def process_new_word(
     level: int,
     deck: int,
     lang:str
-    ) -> tuple[str, str]:
+    ) -> tuple[str, str, str]:
     
     sentence, tags = mistral.generate_sentence_and_tags(new_word, known_words, level, lang)
 
@@ -25,4 +25,4 @@ def process_new_word(
     exporter = AnkiExporter()
     anki_result = exporter.add_card(deck_name, sentence, translation, lang_tts, tags=tags)
 
-    return sentence, anki_result
+    return sentence, translation, anki_result

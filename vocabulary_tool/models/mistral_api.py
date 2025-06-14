@@ -3,6 +3,8 @@ import backend.database as db
 from typing import Tuple
 from backend.level import Difficulty
 
+TIMEOUT=30
+
 def build_prompt(new_word: str, known_words: list[str], difficulty: int, lang_code: str) -> str:
     written_level = Difficulty.get_level(difficulty)
     
@@ -48,7 +50,7 @@ def generate_sentence_and_tags(new_word: str, known_words: list[str], difficulty
         response = requests.post(
             "http://localhost:11434/api/generate",
             json={"model": "mistral", "prompt": prompt, "stream": False},
-            timeout=10
+            timeout=TIMEOUT
         )
         response.raise_for_status()
         result = response.json()

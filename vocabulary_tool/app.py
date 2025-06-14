@@ -35,6 +35,7 @@ selected_deck = st.selectbox(
     range(len(deck_codes)),
     format_func=lambda i: deck_labels[i]
     ) if decks else None
+st.write("debug:", selected_deck)
 
 with st.expander("➕ Incluir novo baralho"):
     new_deck_name = st.text_input("Nome do novo baralho")
