@@ -1,44 +1,24 @@
+# lancher.py
 import subprocess
-import sys
 import os
-import tempfile
-import shutil
-from dotenv import load_dotenv
+import sys
 
-load_dotenv()
+# Obtém o caminho para o ficheiro principal da aplicação
+# Este método garante que funciona tanto em desenvolvimento como no executável
+if hasattr(sys, '_MEIPASS'):
+    # Caminho quando executado pelo PyInstaller
+    APP_PATH = os.path.join(sys._MEIPASS, 'app.py')
+else:
+    # Caminho em desenvolvimento normal
+    APP_PATH = os.path.join(os.path.dirname(__file__), 'app.py')
 
-def resource_path(relative_path):
-    """Retorna caminho absoluto (funciona com PyInstaller)"""
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.abspath(relative_path)
+# Comando para iniciar o Streamlit
+command = ["streamlit", "run", APP_PATH]
 
-def main():
-    temp_dir = tempfile.mkdtemp()
-
-    # Copia todos os arquivos necessários
-    required = [
-        "app.py",
-        "backend",
-        "models",
-        "utils",
-        "data",
-        ".env"
-    ]
-
-    for item in required:
-        src = resource_path(item)
-        dst = os.path.join(temp_dir, item)
-        if os.path.isdir(src):
-            shutil.copytree(src, dst)
-        elif os.path.isfile(src):
-            shutil.copy2(src, dst)
-
-    # Define PYTHONPATH e executa
-    env = os.environ.copy()
-    env["PYTHONPATH"] = temp_dir
-
-    subprocess.run(["streamlit", "run", os.path.join(temp_dir, "app.py")], env=env)
-
-if __name__ == "__main__":
-    main()
+# Executa o comando
+try:
+    subprocess.run(command, check=True)
+except FileNotFoundError:
+    print("Erro: 'streamlit' não encontrado. Certifique-se de que está instalado e no PATH do sistema.")
+except subprocess.CalledProcessError as e:
+    print(f"A aplicação Streamlit terminou com um erro: {e}")
