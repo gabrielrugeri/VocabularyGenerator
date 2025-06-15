@@ -56,7 +56,7 @@ class AnkiExporter:
         return True
 
     def _get_card_css(self) -> str:
-        return f""".card {{ font-family: Arial, sans-serif; font-size: 22px; text-align: center; color: #333; background-color: #f7f7f7; }} b {{ color: {self.highlight_color}; }} .phonetic, .translation {{ font-size: 18px; color: #555; }}"""
+        return f""".card {{ font-family: Arial, sans-serif; font-size: 22px; text-align: center; color: #333; background-color: #f7f7f7; }} b {{ color: {self.highlight_color}; }} .phonetic, .translation {{ font-size: 22px; color: #444; }}"""
 
     def _create_model(self) -> None:
         """Cria o modelo de cartão com um campo para o áudio."""

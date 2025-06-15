@@ -22,8 +22,10 @@ Este é o script recomendado para usar durante o desenvolvimento.
 ```batch
 @echo off
 pyinstaller run_app.py ^
---name "VocabularyGenerator_Dev" ^
+--name "VocabularyGenerator" ^
 --onefile ^
+--windowed ^
+--icon="icon.ico" ^
 --noconfirm ^
 --add-data "app.py;." ^
 --add-data "backend;backend" ^

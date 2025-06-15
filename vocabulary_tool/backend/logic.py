@@ -54,7 +54,7 @@ def process_new_word(
             deck_name=deck_name,
             word=new_word,
             sentence=sentence,
-            phonetic=phonetic, # Passa a informação fonética
+            phonetic=phonetic,
             sentence_translation=sentence_translation,
             word_translation=word_translation,
             tts_lang=lang_tts,

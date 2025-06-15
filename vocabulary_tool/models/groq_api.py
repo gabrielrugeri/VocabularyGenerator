@@ -5,10 +5,6 @@ import re
 
 # --- CORREÇÃO: Importar o gestor de configuração ---
 from utils import config_manager
-# --- CORREÇÃO: Remover dependências de .env ---
-# from dotenv import load_dotenv
-# from utils.helpers import resource_path
-
 import backend.database as db
 from backend.level import Difficulty
 
@@ -18,7 +14,6 @@ class GroqAPIError(Exception):
 
 # --- Configuração do Cliente da API ---
 try:
-    # --- CORREÇÃO: Obter a chave do gestor de configuração ---
     groq_api_key = config_manager.get_api_key("GROQ_API_KEY")
     if not groq_api_key:
         raise ValueError("A chave GROQ_API_KEY não foi configurada.")
@@ -31,7 +26,7 @@ except Exception as e:
     raise GroqAPIError(f"Erro inesperado na inicialização da API do Groq: {e}")
 
 def build_prompt(new_word: str, known_words: Set[str], difficulty: int, lang_code: str) -> str:
-    """Constrói um prompt detalhado para o modelo de linguagem."""
+    """Constrói um prompt detalhado para o LLM"""
     lang_info = db.get_language_by_iso(lang_code)
     if not lang_info:
         raise GroqAPIError(f"O idioma com o código '{lang_code}' não foi encontrado.")
@@ -50,7 +45,7 @@ def build_prompt(new_word: str, known_words: Set[str], difficulty: int, lang_cod
     return (
         f"You are a language learning assistant. Your task is to generate three pieces of educational content in {lang_name} for the word '{new_word}'.\n\n"
         f"1. **Sentence:** Create one single, clear, {written_level}-difficulty sentence in **{lang_name}** that prominently features the word **'{new_word}'**.\n"
-        f"2. **Phonetic:** Provide the IPA (International Phonetic Alphabet) transcription for '{new_word}'.\n"
+        f"2. **Phonetic:** Provide the International Phonetic Alphabet transcription for '{new_word}'.\n"
         f"3. **Tags:** Provide a list of 3-5 relevant learning tags in **{lang_name}** for the word '{new_word}'.\n\n"
         f"**IMPORTANT**: Respond ONLY in the following format, with nothing before or after:\n"
         f"Sentence: [The generated sentence goes here]\n"

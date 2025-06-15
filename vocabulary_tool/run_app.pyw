@@ -15,9 +15,6 @@ def run_streamlit():
     app_path = get_app_path()
     command = ["streamlit", "run", app_path]
     
-    # --- A SOLUÇÃO DEFINITIVA ---
-    # No Windows, usamos a flag CREATE_NO_WINDOW para garantir que nenhum
-    # terminal seja aberto pelo subprocesso.
     if sys.platform == "win32":
         try:
             # Esta flag é a chave para suprimir a janela do terminal

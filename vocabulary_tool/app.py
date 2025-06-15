@@ -16,7 +16,7 @@ def setup_screen():
     """Mostra o ecrã de configuração inicial para as chaves de API."""
     st.set_page_config(page_title="Configuração - Gerador Anki", layout="centered")
     st.title("⚙️ Configuração Inicial")
-    st.warning("Para usar a aplicação pela primeira vez, precisa de fornecer as suas chaves de API.")
+    st.warning("Para usar a aplicação pela primeira vez, você deve fornecer as suas chaves de API.")
     st.info("Estas chaves serão guardadas localmente no seu computador e não serão partilhadas.")
 
     with st.form("api_key_form"):
@@ -105,7 +105,7 @@ def main_app():
                 with st.container():
                     st.markdown(f"---")
                     if word in known_words:
-                        st.warning(f"A palavra '{word}' já foi adicionada. A ignorar.", icon="⚠️")
+                        st.warning(f"A palavra '{word}' já foi adicionada. Ignorando-a...", icon="⚠️")
                         continue
                     try:
                         sentence, translation, anki_result = process_new_word(word, known_words, level, selected_deck_id, selected_language, highlight_color=highlight_color)
@@ -119,7 +119,6 @@ def main_app():
             
             progress_bar.empty()
             
-            # --- LÓGICA CORRIGIDA ---
             # Só mostra os balões e a mensagem de sucesso total se não houver erros.
             if not errors_found:
                 st.balloons()
