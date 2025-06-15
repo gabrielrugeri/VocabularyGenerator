@@ -1,14 +1,16 @@
 import os
 from groq import Groq, GroqError
-from dotenv import load_dotenv
 from typing import Tuple, List, Set
+import re
+
+# --- CORREÇÃO: Importar o gestor de configuração ---
+from utils import config_manager
+# --- CORREÇÃO: Remover dependências de .env ---
+# from dotenv import load_dotenv
+# from utils.helpers import resource_path
+
 import backend.database as db
 from backend.level import Difficulty
-from utils.helpers import resource_path
-
-# Carrega as variáveis de ambiente a partir do caminho correto
-dotenv_path = resource_path(".env")
-load_dotenv(dotenv_path=dotenv_path)
 
 class GroqAPIError(Exception):
     """Exceção customizada para erros relacionados com a API."""
@@ -16,12 +18,17 @@ class GroqAPIError(Exception):
 
 # --- Configuração do Cliente da API ---
 try:
-    groq_api_key = os.getenv("GROQ_API_KEY")
+    # --- CORREÇÃO: Obter a chave do gestor de configuração ---
+    groq_api_key = config_manager.get_api_key("GROQ_API_KEY")
     if not groq_api_key:
-        raise ValueError("A chave GROQ_API_KEY não foi encontrada no ficheiro .env.")
+        raise ValueError("A chave GROQ_API_KEY não foi configurada.")
     client = Groq(api_key=groq_api_key)
 except ValueError as e:
-    raise GroqAPIError(e) from e
+    # Esta exceção será levantada na primeira vez que a app corre, o que é esperado.
+    # A app principal irá lidar com isto mostrando o ecrã de configuração.
+    pass
+except Exception as e:
+    raise GroqAPIError(f"Erro inesperado na inicialização da API do Groq: {e}")
 
 def build_prompt(new_word: str, known_words: Set[str], difficulty: int, lang_code: str) -> str:
     """Constrói um prompt detalhado para o modelo de linguagem."""
@@ -53,7 +60,6 @@ def build_prompt(new_word: str, known_words: Set[str], difficulty: int, lang_cod
 
 def _parse_response(response_text: str) -> Tuple[str, str, List[str]]:
     """Processa a resposta de texto do modelo de forma robusta para extrair frase, fonética e tags."""
-    import re
     try:
         match = re.search(
             r"Sentence:\s*(?P<sentence>.*?)\s*\n\s*Phonetic:\s*(?P<phonetic>.*?)\s*\n\s*Tags:\s*(?P<tags>.*)", 
@@ -75,13 +81,19 @@ def _parse_response(response_text: str) -> Tuple[str, str, List[str]]:
         raise GroqAPIError(f"Falha ao processar a resposta da API: {e}")
 
 def generate_card_content(new_word: str, known_words: Set[str], difficulty: int, lang_code: str) -> Tuple[str, str, List[str]]:
-    """
-    Gera o conteúdo completo para um cartão (frase, fonética, tags) usando a API do Groq.
-    """
+    """Gera o conteúdo completo para um cartão (frase, fonética, tags) usando a API do Groq."""
     prompt = build_prompt(new_word, known_words, difficulty, lang_code)
     
     try:
-        chat_completion = client.chat.completions.create(
+        # Re-inicializa o cliente aqui para garantir que a chave mais recente seja usada
+        # após a configuração inicial.
+        groq_api_key = config_manager.get_api_key("GROQ_API_KEY")
+        if not groq_api_key:
+            raise GroqAPIError("A chave da API do Groq não está configurada. Por favor, configure-a na aplicação.")
+        
+        local_client = Groq(api_key=groq_api_key)
+
+        chat_completion = local_client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="llama3-8b-8192",
             temperature=0.6,
@@ -96,3 +108,4 @@ def generate_card_content(new_word: str, known_words: Set[str], difficulty: int,
         raise GroqAPIError(f"Erro na API do Groq: {e.body.get('message', str(e))}")
     except Exception as e:
         raise GroqAPIError(f"Erro inesperado ao contactar a API: {e}")
+
