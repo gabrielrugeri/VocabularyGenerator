@@ -18,7 +18,7 @@ Para cada palavra que você insere, a aplicação cria um cartão no Anki com:
 Automatiza todo o processo de criação de cartões, permitindo que você se foque em estudar.
 
 ### ✅ Fácil de Usar
-É uma aplicação de um único ficheiro, sem necessidade de instalação complicada.
+É uma aplicação de um único arquivo, sem necessidade de instalação complicada.
 
 ---
 
@@ -27,7 +27,7 @@ Automatiza todo o processo de criação de cartões, permitindo que você se foq
 Para que a aplicação funcione, precisa de 3 coisas:
 
 ### 1. Anki Instalado
-O programa de flashcards. Se não o tiver, pode descarregá-lo em [apps.ankiweb.net](https://apps.ankiweb.net)
+O programa de flashcards. Se não o tiver, faça download em [apps.ankiweb.net](https://apps.ankiweb.net)
 
 ### 2. Add-on AnkiConnect
 Uma pequena extensão que permite que esta aplicação comunique com o seu Anki.
@@ -48,7 +48,7 @@ São como "senhas" que dão à aplicação acesso aos serviços de IA e traduç�
 ## ▶️ Como Usar a Aplicação
 
 ### 1. Execute o Ficheiro
-Clique duas vezes no ficheiro `VocabularyGenerator.exe`.
+Clique duas vezes no arquivo `VocabularyGenerator.exe`.
 
 ### 2. Configuração Inicial (Apenas na primeira vez)
 - A aplicação irá pedir as suas chaves de API do DeepL e do Groq.
@@ -56,7 +56,7 @@ Clique duas vezes no ficheiro `VocabularyGenerator.exe`.
 - A aplicação irá reiniciar e não pedirá as chaves novamente.
 
 ### 3. Uso Diário
-- Abra o Anki. Ele precisa de estar a ser executado para que a magia aconteça.
+- Abra o Anki. Ele precisa de estar a ser executado para que a mágica aconteça.
 - No Gerador de Vocabulário:
   - Escolha o idioma e o baralho para onde os cartões serão enviados
   - Insira as palavras que quer aprender (pode ser uma ou várias, separadas por espaço)
@@ -75,7 +75,7 @@ Se estiver, reinicie o Anki e tente novamente.
 
 ### ❌ "Erro de API do Groq / DeepL"
 **Solução**: É provável que uma das chaves de API esteja incorreta.  
-Para as inserir novamente, terá de apagar o ficheiro de configuração:
+Para as inserir novamente, terá de apagar o arquivo de configuração:
 
 1. Pressione `Win + R`, digite `%appdata%` e pressione Enter  
 2. Encontre e apague a pasta `VocabularyGenerator`  
@@ -85,5 +85,5 @@ Para as inserir novamente, terá de apagar o ficheiro de configuração:
 
 ### ❌ A Aplicação Não Abre?
 **Solução**:  
-Tente executar o ficheiro `VocabularyGenerator.exe` como Administrador:  
+Tente executar o arquivo `VocabularyGenerator.exe` como Administrador:  
 Clique com o botão direito → **Executar como administrador**, pelo menos na primeira vez.
